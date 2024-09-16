@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PersonalExpenseTracker.Web.Filters;
 using PersonalExpenseTracker.Web.Models;
 using System.Diagnostics;
 
 namespace PersonalExpenseTracker.Web.Controllers
 {
+    [RedirectIfAuthenticated]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

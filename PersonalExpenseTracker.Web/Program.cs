@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PersonalExpenseTracker.Infrastructure.DbContext;
 using PersonalExpenseTracker.Infrastructure.Identity;
+using PersonalExpenseTracker.Core.ServiceContracts;
+using PersonalExpenseTracker.Core.Services;
+using PersonalExpenseTracker.Core.Domain.RepositoryContracts;
+using PersonalExpenseTracker.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +27,10 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
 
 
+
+// Add the services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 

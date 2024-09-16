@@ -1,6 +1,7 @@
 ﻿@model PersonalExpenseTracker.Web.Models.ViewModel.Account.SigninViewModel;
 @{
     ViewBag.Title = "Login";
+
 }
 
 
@@ -9,6 +10,13 @@
         <div class="mb-4">
             <h2>Signin to your account</h2>
         </div>
+        @if (ViewBag.LoginFailed != null)
+        {
+            <div>
+                <span class="text-danger">@ViewBag.LoginFailed</span>
+            </div>
+        }
+
         <div class="mb-3">
             <label asp-for="Email" class="form-label"></label>
             <input asp-for="Email" class="form-control" placeholder="Your email....">

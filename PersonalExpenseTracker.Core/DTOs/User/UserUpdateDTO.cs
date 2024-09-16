@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonalExpenseTracker.Core.DTOs.Account
+namespace PersonalExpenseTracker.Core.DTOs.User
 {
-    public class RegisterDTO
+    public class UserUpdateDTO
     {
+        public Guid Id { get; set; }
         public string FullName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public double Salary { get; set; }
     }
 }

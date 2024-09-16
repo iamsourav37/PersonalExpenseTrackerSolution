@@ -37,12 +37,29 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Account" asp-action="Signup">Signup <i class="bi bi-person-plus"></i></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Account" asp-action="Signin">Signin <i class="bi bi-box-arrow-in-right"></i></a>
-                        </li>
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Signup">Signup <i class="bi bi-person-plus"></i></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Signin">Signin <i class="bi bi-box-arrow-in-right"></i></a>
+                            </li>
+                        }
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                               <span class="text-white">Hello @User.Identity.Name</span>
+                            </li>
+                            <li class="nav-item">
+                                @*<form asp-controller="Account" asp-action="Logout">
+            <button type="submit" class="nav-link">Logout</button>
+        </form>*@
+                                <a class="nav-link" asp-controller="Account" asp-action="Logout">Signout <i class="bi bi-box-arrow-in-left"></i></a>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>
