@@ -28,14 +28,16 @@ namespace PersonalExpenseTracker.Infrastructure.Repository
             throw new NotImplementedException();
         }
 
-        public Task GetUserByIdAsync(Guid? id)
+        public async Task<User> GetUserByIdAsync(Guid? id)
         {
-            throw new NotImplementedException();
+           return await _applicationDbContext.Users.FindAsync(id);
         }
 
-        public Task UpdateUserAsync(User user)
+        public async Task<User> UpdateUserAsync(User user)
         {
-            throw new NotImplementedException();
+            _applicationDbContext.Users.Update(user);
+            await _applicationDbContext.SaveChangesAsync();
+            return user;
         }
     }
 }

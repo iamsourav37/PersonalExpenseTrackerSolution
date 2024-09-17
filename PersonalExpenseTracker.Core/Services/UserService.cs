@@ -41,14 +41,35 @@ namespace PersonalExpenseTracker.Core.Services
             throw new NotImplementedException();
         }
 
-        public Task<UserDTO> GetUserByIdAsync(Guid userId)
+        public async Task<UserDTO> GetUserByIdAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            var result = await _userRepository.GetUserByIdAsync(userId);
+            if (result != null)
+            {
+                var userDto = new UserDTO()
+                {
+                    FullName = result.FullName,
+                    Id = result.UserId,
+                    Salary = result.Salary ?? 0.0
+                };
+                return userDto;
+            }
+            return null;
         }
 
-        public Task<UserDTO> UpdateUserAsync(UserUpdateDTO userUpdateDTO)
+        public async Task<UserDTO> UpdateUserAsync(UserUpdateDTO userUpdateDTO)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetUserByIdAsync(userUpdateDTO.Id);
+            user.FullName = userUpdateDTO.FullName;
+            user.Salary = userUpdateDTO.Salary;
+            var updatedUser = await _userRepository.UpdateUserAsync(user);
+            var userDto = new UserDTO()
+            {
+                FullName = updatedUser.FullName,
+                Id = updatedUser.UserId,
+                Salary = updatedUser.Salary ?? 0.0
+            };
+            return userDto;
         }
     }
 }

@@ -10,7 +10,7 @@ using System.Text;
 
 namespace PersonalExpenseTracker.Web.Controllers
 {
-   
+
     public class AccountController : Controller
     {
 
@@ -41,17 +41,10 @@ namespace PersonalExpenseTracker.Web.Controllers
             {
                 return View(signupViewModel);
             }
-            // Call the User service to create the User
-            var userCreateDto = new UserCreateDTO()
-            {
-                FullName = signupViewModel.FullName
-            };
-            var userDTO = await _userService.CreateUserAsync(userCreateDto);
 
-            // now create the account
+
             ApplicationUser applicationUser = new ApplicationUser()
             {
-                UserId = userDTO.Id,
                 Email = signupViewModel.Email,
                 UserName = signupViewModel.Email,
                 NormalizedEmail = signupViewModel.Email.ToUpper()
@@ -62,6 +55,14 @@ namespace PersonalExpenseTracker.Web.Controllers
             if (identityResult.Succeeded)
             {
                 await _signInManager.SignInAsync(applicationUser, isPersistent: true);
+                // Call the User service to create the User
+                var userCreateDto = new UserCreateDTO()
+                {
+                    FullName = signupViewModel.FullName
+                };
+                var userDTO = await _userService.CreateUserAsync(userCreateDto);
+                applicationUser.UserId = userDTO.Id;
+                await _userManager.UpdateAsync(applicationUser);
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -95,7 +96,7 @@ namespace PersonalExpenseTracker.Web.Controllers
 
                 if (signInResult.Succeeded)
                 {
-                   // this line is not required right now
+                    // this line is not required right now
                     var applicationUser = _userManager.FindByEmailAsync(signinViewModel.Email);
                     return RedirectToAction("Index", "User");
                 }

@@ -14,7 +14,7 @@ namespace PersonalExpenseTracker.Core.Domain.Entities
         public Guid Id { get; set; }
         [Required]
         public double Amount { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         [Required]
         public DateTime ExpenseDate { get; set; } = DateTime.Now;
 

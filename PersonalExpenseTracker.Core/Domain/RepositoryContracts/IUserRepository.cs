@@ -10,8 +10,8 @@ namespace PersonalExpenseTracker.Core.Domain.RepositoryContracts
     public interface IUserRepository
     {
         Task CreateUserAsync(User user);
-        Task GetUserByIdAsync(Guid? id);
-        Task UpdateUserAsync(User user);
+        Task<User> GetUserByIdAsync(Guid? id);
+        Task<User> UpdateUserAsync(User user);
         Task DeleteUserByIdAsync(Guid? id);
     }
 }

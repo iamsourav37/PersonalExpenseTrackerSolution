@@ -10,7 +10,7 @@ namespace PersonalExpenseTracker.Infrastructure.Identity
 {
     public class ApplicationUser : IdentityUser<Guid>
     {
-        public Guid UserId { get; set; }
-        public User  User { get; set; }
+        public Guid? UserId { get; set; }
+        public User?  User { get; set; }
     }
 }
