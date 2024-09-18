@@ -24,7 +24,7 @@ namespace PersonalExpenseTracker.Web.Controllers
         private async Task<UserDTO> GetCurrentUser()
         {
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the logged-in user's ID
-            var applicationUser = await _userManager.FindByIdAsync(identityUserId); // Load the ApplicationUser\
+            var applicationUser = await _userManager.FindByIdAsync(identityUserId); // Load the ApplicationUser 
             var usreId = Guid.Parse(applicationUser.UserId.ToString());
             return await _userService.GetUserByIdAsync(usreId);
         }
