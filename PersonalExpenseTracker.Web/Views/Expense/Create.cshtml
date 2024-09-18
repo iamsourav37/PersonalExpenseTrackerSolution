@@ -1,0 +1,25 @@
+﻿@model PersonalExpenseTracker.Web.Models.ViewModel.Expense.ExpenseCreateViewModel;
+@{
+    ViewBag.Title = "Create Expense";
+}
+
+<div class="container" style="width:500px; height:500px; padding:10px; margin-top:30px;">
+    <div class="mb-4">
+        <h2>Create Expense</h2>
+    </div>
+    <form asp-controller="Account" asp-action="Signup" method="post">
+        <div class="mb-3">
+            <label asp-for="Amount" class="form-label"></label>
+            <input asp-for="Amount" class="form-control" placeholder="Expense Amount">
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <input asp-for="Description" class="form-control" placeholder="Write description about your expense...">
+        </div>
+        <div class="mb-3">
+            <label asp-for="ExpenseDate" class="form-label"></label>
+            <input asp-for="ExpenseDate" class="form-control">
+        </div>
+        <button class="btn btn-dark">Create</button>
+    </form>
+</div>

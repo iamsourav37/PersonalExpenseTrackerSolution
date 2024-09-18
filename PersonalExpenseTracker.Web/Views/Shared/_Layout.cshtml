@@ -20,21 +20,24 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-3 mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">About</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Expense <i class="bi bi-wallet2"></i>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-cash-stack"></i> Add Expense</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-tags"> </i>Add Category</a></li>
-                                <li><a class="dropdown-item" href="#"> <i class="bi bi-receipt"></i> View Expenses</a></li>
-                            </ul>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a asp-controller="Expense" asp-action="Index" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Expense <i class="bi bi-wallet2"></i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Expense" asp-action="Create"><i class="bi bi-cash-stack"></i> Add Expense</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-tags"> </i>Add Category</a></li>
+                                    <li><a asp-controller="Expense" asp-action="Index" class="dropdown-item"> <i class="bi bi-receipt"></i> View Expenses</a></li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         @if (!User.Identity.IsAuthenticated)
@@ -50,12 +53,12 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                               <span class="text-white">Hello @ViewBag.FullName</span>
+                                <span class="text-white">Hello @ViewBag.FullName</span>
                             </li>
                             <li class="nav-item">
                                 @*<form asp-controller="Account" asp-action="Logout">
-            <button type="submit" class="nav-link">Logout</button>
-        </form>*@
+                                        <button type="submit" class="nav-link">Logout</button>
+                                    </form>*@
                                 <a class="nav-link" asp-controller="Account" asp-action="Logout">Signout <i class="bi bi-box-arrow-in-left"></i></a>
                             </li>
                         }

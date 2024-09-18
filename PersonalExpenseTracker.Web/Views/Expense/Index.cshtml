@@ -6,4 +6,10 @@
 
 <div>
     <h1>All the expenses</h1>
+    @foreach (var expense in Model)
+    {
+        <h1>@expense.Description</h1>
+        <h1>@expense.Amount</h1>
+        <h1>@expense.ExpenseDate</h1>
+    }
 </div>

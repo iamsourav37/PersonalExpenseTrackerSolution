@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 using PersonalExpenseTracker.Core.ServiceContracts;
 using PersonalExpenseTracker.Infrastructure.Identity;
 using PersonalExpenseTracker.Web.Helper;
@@ -35,6 +34,11 @@ namespace PersonalExpenseTracker.Web.Controllers
                 ExpenseDate = e.ExpenseDate,    
             }).ToList();
             return View(expensesViewModel);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
         }
     }
 }
