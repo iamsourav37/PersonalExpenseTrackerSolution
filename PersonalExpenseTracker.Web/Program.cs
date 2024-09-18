@@ -31,6 +31,8 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
 // Add the services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
 
 
 
