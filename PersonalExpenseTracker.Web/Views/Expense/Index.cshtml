@@ -8,8 +8,16 @@
     <h1>All the expenses</h1>
     @foreach (var expense in Model)
     {
-        <h1>@expense.Description</h1>
-        <h1>@expense.Amount</h1>
-        <h1>@expense.ExpenseDate</h1>
+        <div class="card w-25">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Rs. @expense.Amount
+                </h5>
+                <p class="card-text">@expense.Description</p>
+                <p class="card-text">@expense.ExpenseDate</p>
+                <a href="#" class="btn btn-primary">Edit</a>
+            </div>
+        </div>
+
     }
 </div>
