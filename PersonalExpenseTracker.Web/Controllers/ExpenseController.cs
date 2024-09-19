@@ -58,14 +58,28 @@ namespace PersonalExpenseTracker.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+
+                var categoryDtoList = await _categoryService.GetAllCategoryAsync();
+                expenseCreateViewModel.CategoryList = categoryDtoList.Select<CategoryDTO, SelectListItem>(categoryDto =>
+                        new SelectListItem { Value = categoryDto.Id.ToString(), Text = categoryDto.Name }
+                    );
+                var errorMessages = ModelState.Values
+                                  .SelectMany(v => v.Errors)
+                                  .Select(e => e.ErrorMessage);
+
+                ViewBag.ErrorMessage = string.Join(" | ", errorMessages); ;
                 return View(expenseCreateViewModel);
             }
 
             var expenseCreateDto = new ExpeneCreateDTO()
             {
                 Amount = expenseCreateViewModel.Amount,
-
+                CategoryId = expenseCreateViewModel.CategoryId,
+                Description = expenseCreateViewModel.Description,
+                ExpenseDate = expenseCreateViewModel.ExpenseDate,
+                UserId = await _userHelper.GetCurrentUser(User)
             };
+            var result = await _expenseService.CreateExpenseAsync(expenseCreateDto);
             return RedirectToAction(nameof(ExpenseController.Index));
         }
     }
