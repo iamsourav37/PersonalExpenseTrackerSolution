@@ -88,5 +88,28 @@ namespace PersonalExpenseTracker.Core.Services
             };
             return expenseDto;
         }
+
+        public async Task<ExpenseDTO> GetExpenseByIdAsync(Guid id)
+        {
+            try
+            {
+                var expense = await _expenseRepository.GetExpenseByIdAsync(id);
+                return new ExpenseDTO()
+                {
+                    Amount = expense.Amount,
+                    CategoryId= expense.CategoryId,
+                    Description = expense.Description,
+                    ExpenseDate = expense.ExpenseDate,
+                    Id = expense.Id
+                    
+                };
+
+            }
+            catch (Exception ex)
+            {
+                await Console.Out.WriteLineAsync($"exception occured in GetExpenseByIdAsync(), details: {ex.Message}");
+            }
+            return null;
+        }
     }
 }

@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel;
+﻿
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace PersonalExpenseTracker.Web.Models.ViewModel.Expense
 {
-    public class ExpenseCreateViewModel
+    public class ExpenseUpdateViewModel
     {
+        public Guid Id { get; set; }
         [DataType(DataType.Currency)]
-        [Required(ErrorMessage ="Please enter an amount")]
+        [Required]
         public double Amount { get; set; }
         public string? Description { get; set; }
 

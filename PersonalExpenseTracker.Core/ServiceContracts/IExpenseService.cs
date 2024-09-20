@@ -13,5 +13,6 @@ namespace PersonalExpenseTracker.Core.ServiceContracts
         Task<ExpenseDTO> CreateExpenseAsync(ExpeneCreateDTO expeneCreateDTO);
         Task<ExpenseDTO> UpdateExpenseAsync(ExpenseUpdateDTO expenseUpdateDTO);
         Task DeleteExpenseAsync(Guid expenseId);
+        Task<ExpenseDTO> GetExpenseByIdAsync(Guid id);
     }
 }

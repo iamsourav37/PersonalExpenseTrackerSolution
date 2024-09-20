@@ -20,10 +20,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-3 mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">About</a>
+                            <a class="nav-link" aria-current="page" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -33,9 +30,11 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" asp-controller="Expense" asp-action="Create"><i class="bi bi-cash-stack"></i> Add Expense</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-tags"> </i>Add Category</a></li>
                                     <li><a asp-controller="Expense" asp-action="Index" class="dropdown-item"> <i class="bi bi-receipt"></i> View Expenses</a></li>
                                 </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Expense" asp-action="Index">Category</a>
                             </li>
                         }
                     </ul>

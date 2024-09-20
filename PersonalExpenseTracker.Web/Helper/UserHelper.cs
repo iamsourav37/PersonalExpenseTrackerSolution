@@ -18,14 +18,16 @@ namespace PersonalExpenseTracker.Web.Helper
             this._userService = userService;
         }
 
-        public async Task<Guid> GetCurrentUser(ClaimsPrincipal claimsPrincipal)
+        public async Task<Guid?> GetCurrentUser(ClaimsPrincipal claimsPrincipal)
         {
             _claimsPrincipal = claimsPrincipal;
             var identityUserId = _claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier); // Get the logged-in user's ID
             var applicationUser = await _userManager.FindByIdAsync(identityUserId); // Load the ApplicationUser 
-            var usreId = Guid.Parse(applicationUser.UserId.ToString());
-            var userDto = await _userService.GetUserByIdAsync(usreId);
-            return userDto.Id;
+            return applicationUser?.UserId;
+            
+
+            //var userDto = await _userService.GetUserByIdAsync(usreId);
+            //return userDto.Id;
         }
     }
 }

@@ -4,20 +4,29 @@
 }
 
 
-<div>
-    <h1>All the expenses</h1>
-    @foreach (var expense in Model)
-    {
-        <div class="card w-25">
-            <div class="card-body">
-                <h5 class="card-title">
-                    Rs. @expense.Amount
-                </h5>
-                <p class="card-text">@expense.Description</p>
-                <p class="card-text">@expense.ExpenseDate</p>
-                <a href="#" class="btn btn-primary">Edit</a>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">All the Expenses</h1>
+    <div class="row">
+        @foreach (var expense in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">
+                            ₹ @expense.Amount
+                        </h5>
+                        <p class="card-text text-muted">
+                            <i class="fas fa-info-circle"></i> @expense.Description
+                        </p>
+                        <p class="card-text">
+                            <i class="fas fa-calendar-alt"></i> @expense.ExpenseDate.ToString("dddd, MMMM dd, yyyy")
+                        </p>
+                        <a class="btn btn-outline-primary w-100" asp-controller="Expense" asp-action="Update" asp-route-expenseId="@expense.Id">Edit</a>
+                    </div>
+                </div>
             </div>
-        </div>
-
-    }
+        }
+    </div>
 </div>
+
+

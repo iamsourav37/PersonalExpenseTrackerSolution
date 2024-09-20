@@ -20,4 +20,12 @@
     <ProjectReference Include="..\PersonalExpenseTracker.Infrastructure\PersonalExpenseTracker.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Expense\Update.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Expense\Update.cshtml" />
+  </ItemGroup>
+
 </Project>

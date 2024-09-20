@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace PersonalExpenseTracker.Web.Controllers
 {
-    [RedirectIfAuthenticated]
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -15,17 +15,19 @@ namespace PersonalExpenseTracker.Web.Controllers
         {
             _logger = logger;
         }
-
+        [RedirectIfAuthenticated]
         public IActionResult Index()
         {
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
         }
 
+        [RedirectIfAuthenticated]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

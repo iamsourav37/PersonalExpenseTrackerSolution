@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PersonalExpenseTracker.Core.Domain.Entities;
 using PersonalExpenseTracker.Core.DTOs.Category;
 using PersonalExpenseTracker.Core.DTOs.Expense;
 using PersonalExpenseTracker.Core.ServiceContracts;
@@ -29,7 +30,7 @@ namespace PersonalExpenseTracker.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = await _userHelper.GetCurrentUser(User);
-            var allExpenses = await _expenseService.GetAllExpenseAsync(userId);
+            var allExpenses = await _expenseService.GetAllExpenseAsync((Guid)userId);
             var expensesViewModel = allExpenses?.Select(e => new ExpenseViewModel()
             {
                 Id = e.Id,
@@ -77,10 +78,64 @@ namespace PersonalExpenseTracker.Web.Controllers
                 CategoryId = expenseCreateViewModel.CategoryId,
                 Description = expenseCreateViewModel.Description,
                 ExpenseDate = expenseCreateViewModel.ExpenseDate,
-                UserId = await _userHelper.GetCurrentUser(User)
+                UserId = (Guid)await _userHelper.GetCurrentUser(User)
             };
             var result = await _expenseService.CreateExpenseAsync(expenseCreateDto);
             return RedirectToAction(nameof(ExpenseController.Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid expenseId)
+        {
+            var expenseDto = await _expenseService.GetExpenseByIdAsync(expenseId);
+
+            var categoryDtoList = await _categoryService.GetAllCategoryAsync();
+
+            ExpenseUpdateViewModel expenseUpdateViewModel = new ExpenseUpdateViewModel()
+            {
+                Id = expenseId,
+                Amount = expenseDto.Amount,
+                CategoryId = expenseDto.CategoryId,
+                Description = expenseDto.Description,
+                ExpenseDate = expenseDto.ExpenseDate,
+                CategoryList = categoryDtoList.Select<CategoryDTO, SelectListItem>(categoryDto =>
+                    new SelectListItem { Value = categoryDto.Id.ToString(), Text = categoryDto.Name, Selected = expenseDto.CategoryId == expenseId ? true : false }
+                )
+            };
+
+            return View(expenseUpdateViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(ExpenseUpdateViewModel expenseUpdateViewModel)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                var categoryDtoList = await _categoryService.GetAllCategoryAsync();
+                expenseUpdateViewModel.CategoryList = categoryDtoList.Select<CategoryDTO, SelectListItem>(categoryDto =>
+                        new SelectListItem { Value = categoryDto.Id.ToString(), Text = categoryDto.Name, Selected = categoryDto.Id == expenseUpdateViewModel.CategoryId ? true : false }
+                    );
+                var errorMessages = ModelState.Values
+                                  .SelectMany(v => v.Errors)
+                                  .Select(e => e.ErrorMessage);
+
+                ViewBag.ErrorMessage = string.Join(" | ", errorMessages);
+                return View(expenseUpdateViewModel);
+            }
+
+            var expenseUpdateDto = new ExpenseUpdateDTO()
+            {
+                Id = expenseUpdateViewModel.Id,
+                Amount = expenseUpdateViewModel.Amount,
+                CategoryId = expenseUpdateViewModel.CategoryId,
+                Description = expenseUpdateViewModel.Description,
+                ExpenseDate = expenseUpdateViewModel.ExpenseDate
+            };
+
+            var result = await _expenseService.UpdateExpenseAsync(expenseUpdateDto);
+            return RedirectToAction("Index");
+        }
+
     }
 }
