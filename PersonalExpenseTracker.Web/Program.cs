@@ -7,6 +7,7 @@ using PersonalExpenseTracker.Core.ServiceContracts;
 using PersonalExpenseTracker.Core.Services;
 using PersonalExpenseTracker.Core.Domain.RepositoryContracts;
 using PersonalExpenseTracker.Infrastructure.Repository;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +26,6 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddDefaultTokenProviders()
     .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
     .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
-
-
 
 // Add the services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -50,6 +49,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",

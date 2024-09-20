@@ -137,5 +137,11 @@ namespace PersonalExpenseTracker.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> Delete(Guid expenseId)
+        {
+            await _expenseService.DeleteExpenseAsync(expenseId);
+            return RedirectToAction("Index");
+        }
+
     }
 }
