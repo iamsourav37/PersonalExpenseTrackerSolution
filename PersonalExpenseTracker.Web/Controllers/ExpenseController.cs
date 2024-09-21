@@ -68,7 +68,7 @@ namespace PersonalExpenseTracker.Web.Controllers
                                   .SelectMany(v => v.Errors)
                                   .Select(e => e.ErrorMessage);
 
-                ViewBag.ErrorMessage = string.Join(" | ", errorMessages); ;
+                ViewBag.ErrorMessage = string.Join(" | ", errorMessages);
                 return View(expenseCreateViewModel);
             }
 

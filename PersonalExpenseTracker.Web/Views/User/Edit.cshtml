@@ -10,6 +10,11 @@
             <h2>Update your profile !!!</h2>
         </div>
 
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {<div class="alert alert-danger">
+                @ViewBag.ErrorMessage
+            </div>
+        }
         <div class="mb-3">
             <label asp-for="FullName" class="form-label"></label>
             <input asp-for="FullName" class="form-control" placeholder="Your Full Name....">

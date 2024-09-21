@@ -8,6 +8,7 @@ namespace PersonalExpenseTracker.Web.Models.ViewModel.User
         [DisplayName("Full Name")]
         [Required]
         public string FullName { get; set; }
-        public double Salary { get; set; }
+        
+        public double? Salary { get; set; }
     }
 }

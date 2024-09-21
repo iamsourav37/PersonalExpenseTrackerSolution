@@ -1,0 +1,20 @@
+﻿@model IEnumerable<PersonalExpenseTracker.Web.Models.ViewModel.Category.CategoryViewModel>
+@{
+    ViewBag.Title = "Category List";
+}
+
+
+<div class="container">
+
+    <div style="width:400px;" class=" mt-5">
+        <h3>Predefined Category List</h3>
+        <ul class="list-group">
+            @foreach (var category in Model)
+            {
+                <li class="list-group-item">@category.Name</li>
+
+            }
+        </ul>
+    </div>
+
+</div>

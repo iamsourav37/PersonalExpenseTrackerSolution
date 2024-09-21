@@ -5,6 +5,7 @@ using PersonalExpenseTracker.Core.DTOs.User;
 using PersonalExpenseTracker.Core.ServiceContracts;
 using PersonalExpenseTracker.Infrastructure.Identity;
 using PersonalExpenseTracker.Web.Models.ViewModel.User;
+using System.Diagnostics;
 using System.Security.Claims;
 
 namespace PersonalExpenseTracker.Web.Controllers
@@ -36,26 +37,38 @@ namespace PersonalExpenseTracker.Web.Controllers
             return View();
         }
 
-        public IActionResult Edit()
+        public async Task<IActionResult> Edit()
         {
-            return View();
+            var userData = await this.GetCurrentUser();
+            var userEditVeiwModel = new UserEditViewModel()
+            {
+                FullName = userData.FullName,
+                Salary = userData.Salary
+            };
+            return View(userEditVeiwModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(UserEditViewModel userEditViewModel)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var user = await GetCurrentUser();
                 var userUpdateDto = new UserUpdateDTO()
                 {
                     Id = user.Id,
                     FullName = userEditViewModel.FullName,
-                    Salary = userEditViewModel.Salary
+                    Salary = userEditViewModel.Salary ?? 0.0
                 };
-               var result = await _userService.UpdateUserAsync(userUpdateDto);
+                var result = await _userService.UpdateUserAsync(userUpdateDto);
                 return RedirectToAction("Index");
             }
+            var errorMessages = ModelState.Values
+                                  .SelectMany(v => v.Errors)
+                                  .Select(e => e.ErrorMessage);
+
+            ViewBag.ErrorMessage = string.Join(" | ", errorMessages);
+
             return View();
         }
     }
