@@ -27,7 +27,7 @@
 
                     <!-- Category Dropdown -->
                     <div class="col-md-4 mb-3">
-                        <label asp-for="Filter.CategoryId" class="form-label"></label>
+                        <label asp-for="Filter.CategoryId" class="form-label">Select Category</label>
                         <select asp-for="Filter.CategoryId" asp-items="ViewBag.CategoryList" class="form-select">
                             <option value="">Select a category</option>
                         </select>
@@ -58,6 +58,7 @@
                 <div class="row">
                     <div class="col-md-12 text-end">
                         <button type="submit" class="btn btn-primary">Apply Filter</button>
+                        <a asp-controller="Expense" asp-action="AdvancedFilter" class="btn btn-secondary">Reset</a>
                     </div>
                 </div>
             </form>
@@ -79,7 +80,6 @@
                             <th>Description</th>
                             <th>Amount</th>
                             <th>Category</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -91,10 +91,6 @@
                                 <td>@expense.Description</td>
                                 <td>₹@expense.Amount</td>
                                 <td>@expense.CategoryName</td>
-                                <td>
-                                    <a href="@Url.Action("Edit", new { id = expense.Id })" class="btn btn-sm btn-warning">Edit</a>
-                                    <a href="@Url.Action("Delete", new { id = expense.Id })" class="btn btn-sm btn-danger">Delete</a>
-                                </td>
                             </tr>
                         }
                     </tbody>

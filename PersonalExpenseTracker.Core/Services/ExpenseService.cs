@@ -117,13 +117,37 @@ namespace PersonalExpenseTracker.Core.Services
 
         public async Task<IEnumerable<ExpenseDTO>> GetExpensesByFilter(ExpenseFilterDTO expenseFilterDTO)
         {
-            if(string.IsNullOrEmpty(expenseFilterDTO.UserId.ToString()))
+            if (string.IsNullOrEmpty(expenseFilterDTO.UserId.ToString()))
             {
                 return null;
             }
 
+
+            #region Prepare the Expression
             Expression<Func<Expense, bool>> filterExpression = expense => expense.UserId == expenseFilterDTO.UserId;
 
+            if (expenseFilterDTO.StartDate.HasValue)
+            {
+                filterExpression = CombineExpressions(filterExpression, expense => expense.ExpenseDate >= expenseFilterDTO.StartDate);
+            }
+
+            if (expenseFilterDTO.EndDate.HasValue)
+            {
+                filterExpression = CombineExpressions(filterExpression, expense => expense.ExpenseDate <= expenseFilterDTO.EndDate);
+            }
+            if (expenseFilterDTO.CategoryId.HasValue)
+            {
+                filterExpression = CombineExpressions(filterExpression, expense => expense.CategoryId == expenseFilterDTO.CategoryId);
+            }
+            if (expenseFilterDTO.Amount.HasValue)
+            {
+                filterExpression = CombineExpressions(filterExpression, GetAmountFilter(expenseFilterDTO.Amount ?? 0, expenseFilterDTO.AmountOperator));
+            }
+            if (!string.IsNullOrEmpty(expenseFilterDTO.Description))
+            {
+                filterExpression = CombineExpressions(filterExpression, expense => expense.Description.Contains(expenseFilterDTO.Description));
+            }
+            #endregion
 
             var expressionResult = await _expenseRepository.GetByExpressionAsync(filterExpression);
 
@@ -143,7 +167,7 @@ namespace PersonalExpenseTracker.Core.Services
                 Description = expense.Description,
                 CategoryId = expense.CategoryId,
                 ExpenseDate = expense.ExpenseDate,
-                CategoryName = categoryDictionary.GetValueOrDefault(expense.Id)
+                CategoryName = categoryDictionary.GetValueOrDefault(expense.CategoryId)
             });
             return filterResultExpenseDtoList;
         }
@@ -163,5 +187,25 @@ namespace PersonalExpenseTracker.Core.Services
             return combined;
         }
 
+
+        private Expression<Func<Expense, bool>> GetAmountFilter(double amount, string amountOperator)
+        {
+            switch (amountOperator)
+            {
+                case "GT":
+                    return expense => expense.Amount > amount;
+                case "GE":
+                    return expense => expense.Amount >= amount;
+                case "LT":
+                    return expense => expense.Amount < amount;
+                case "LE":
+                    return expense => expense.Amount <= amount;
+                case "EQ":
+                    return expense => expense.Amount == amount;
+                default:
+                    return expense => expense.Amount == amount;
+
+            }
+        }
     }
 }

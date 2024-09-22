@@ -161,7 +161,7 @@ namespace PersonalExpenseTracker.Web.Controllers
                     UserId = await _userHelper.GetCurrentUser(User) ?? Guid.Empty
                 };
                 var filterResult = await _expenseService.GetExpensesByFilter(expenseFilterDto);
-                if (filterResult != null && filterResult.Count() > 0)
+                if (filterResult != null && filterResult.Any())
                 {
                     var expenseViewModelList = filterResult.Select(expenseDto => new ExpenseViewModel()
                     {
