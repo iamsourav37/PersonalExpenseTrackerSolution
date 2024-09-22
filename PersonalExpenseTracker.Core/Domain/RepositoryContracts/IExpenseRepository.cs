@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,5 +15,6 @@ namespace PersonalExpenseTracker.Core.Domain.RepositoryContracts
         Task<Expense> CreateExpenseAsync(Expense expense);
         Task<Expense> UpdateExpenseAsync(Expense expense);
         Task DeleteExpenseAsync(Guid? expenseId);
+        Task<IEnumerable<Expense>> GetByExpressionAsync(Expression<Func<Expense, bool>> filterExpression);
     }
 }

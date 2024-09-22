@@ -5,6 +5,7 @@ using PersonalExpenseTracker.Infrastructure.DbContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,6 +42,12 @@ namespace PersonalExpenseTracker.Infrastructure.Repository
             //return await _dbContext.Expenses.Include("User").ToListAsync();
             //return await _dbContext.Expenses.Include("User").Where(e => e.UserId == userId).ToListAsync();
             return await _dbContext.Expenses.Include(e => e.User).Where(e => e.UserId == userId).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Expense>> GetByExpressionAsync(Expression<Func<Expense, bool>> filterExpression)
+        {
+            var query = _dbContext.Expenses.Where(filterExpression);
+            return await query.ToListAsync();
         }
 
         public async Task<Expense> GetExpenseByIdAsync(Guid? expenseId)

@@ -5,6 +5,7 @@ using PersonalExpenseTracker.Core.ServiceContracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,10 +14,12 @@ namespace PersonalExpenseTracker.Core.Services
     public class ExpenseService : IExpenseService
     {
         private readonly IExpenseRepository _expenseRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ExpenseService(IExpenseRepository expenseRepository)
+        public ExpenseService(IExpenseRepository expenseRepository, ICategoryRepository categoryRepository)
         {
             this._expenseRepository = expenseRepository;
+            this._categoryRepository = categoryRepository;
         }
         public async Task<ExpenseDTO> CreateExpenseAsync(ExpeneCreateDTO expeneCreateDTO)
         {
@@ -97,11 +100,11 @@ namespace PersonalExpenseTracker.Core.Services
                 return new ExpenseDTO()
                 {
                     Amount = expense.Amount,
-                    CategoryId= expense.CategoryId,
+                    CategoryId = expense.CategoryId,
                     Description = expense.Description,
                     ExpenseDate = expense.ExpenseDate,
                     Id = expense.Id
-                    
+
                 };
 
             }
@@ -111,5 +114,54 @@ namespace PersonalExpenseTracker.Core.Services
             }
             return null;
         }
+
+        public async Task<IEnumerable<ExpenseDTO>> GetExpensesByFilter(ExpenseFilterDTO expenseFilterDTO)
+        {
+            if(string.IsNullOrEmpty(expenseFilterDTO.UserId.ToString()))
+            {
+                return null;
+            }
+
+            Expression<Func<Expense, bool>> filterExpression = expense => expense.UserId == expenseFilterDTO.UserId;
+
+
+            var expressionResult = await _expenseRepository.GetByExpressionAsync(filterExpression);
+
+            // For Category Name
+            var categoryList = await _categoryRepository.GetAllCategoryAsync();
+            Dictionary<Guid, string> categoryDictionary = new Dictionary<Guid, string>();
+            foreach (var category in categoryList)
+            {
+                categoryDictionary.Add(category.CategoryId, category.CategoryName);
+            }
+
+
+            var filterResultExpenseDtoList = expressionResult.Select(expense => new ExpenseDTO()
+            {
+                Id = expense.Id,
+                Amount = expense.Amount,
+                Description = expense.Description,
+                CategoryId = expense.CategoryId,
+                ExpenseDate = expense.ExpenseDate,
+                CategoryName = categoryDictionary.GetValueOrDefault(expense.Id)
+            });
+            return filterResultExpenseDtoList;
+        }
+
+        private Expression<Func<Expense, bool>> CombineExpressions(Expression<Func<Expense, bool>> expr1, Expression<Func<Expense, bool>> expr2)
+        {
+            var parameter = Expression.Parameter(typeof(Expense), "e");
+
+            var combined = Expression.Lambda<Func<Expense, bool>>(
+                Expression.AndAlso(
+                    Expression.Invoke(expr1, parameter),
+                    Expression.Invoke(expr2, parameter)
+                ),
+                parameter
+            );
+
+            return combined;
+        }
+
     }
 }

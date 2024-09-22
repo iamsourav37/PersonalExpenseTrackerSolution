@@ -143,5 +143,55 @@ namespace PersonalExpenseTracker.Web.Controllers
             return RedirectToAction("Index");
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> AdvancedFilter(ExpenseFilterViewModel expenseFilterViewModel)
+        {
+
+            if (expenseFilterViewModel != null && expenseFilterViewModel.Filter != null)
+            {
+                var expenseFilterDto = new ExpenseFilterDTO()
+                {
+                    Amount = expenseFilterViewModel.Filter.Amount,
+                    AmountOperator = expenseFilterViewModel.Filter.Operator,
+                    CategoryId = expenseFilterViewModel.Filter.CategoryId,
+                    Description = expenseFilterViewModel.Filter.Description,
+                    StartDate = expenseFilterViewModel.Filter.StartDate,
+                    EndDate = expenseFilterViewModel.Filter.EndDate,
+                    UserId = await _userHelper.GetCurrentUser(User) ?? Guid.Empty
+                };
+                var filterResult = await _expenseService.GetExpensesByFilter(expenseFilterDto);
+                if (filterResult != null && filterResult.Count() > 0)
+                {
+                    var expenseViewModelList = filterResult.Select(expenseDto => new ExpenseViewModel()
+                    {
+                        Id = expenseDto.Id,
+                        Amount = expenseDto.Amount,
+                        CategoryId = expenseDto.CategoryId, 
+                        CategoryName = expenseDto.CategoryName,
+                        Description = expenseDto.Description,
+                        ExpenseDate = expenseDto.ExpenseDate
+                    });
+                    expenseFilterViewModel.FilterResult = expenseViewModelList;
+                }
+            }
+
+            var categoryList = await _categoryService.GetAllCategoryAsync();
+            List<SelectListItem> categories = categoryList.Select(category => new SelectListItem() { Value = category.Id.ToString(), Text = category.Name }).ToList();
+           ViewBag.OperatorList = Enum.GetValues(typeof(OperatorOption))
+                        .Cast<OperatorOption>()
+                        .Select(o => new SelectListItem
+                        {
+                            Value = o.ToString(),
+                            Text = o.ToString(),
+                            Selected = o.ToString().Equals("EQ") ? true : false
+                        })
+                        .ToList();
+
+
+            ViewBag.CategoryList = categories;
+            return View(expenseFilterViewModel);
+        }
+
     }
 }
